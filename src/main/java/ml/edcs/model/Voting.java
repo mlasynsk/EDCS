@@ -1,15 +1,9 @@
 package ml.edcs.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Voting extends BaseEntity {
     private List<String> options;
-    @JsonIgnore
-    private Map<String, Vote> votes;
 
     public Voting() {
         super.setType(Type.CREATE);
@@ -17,16 +11,7 @@ public class Voting extends BaseEntity {
 
     public Voting(List<String> options) {
         this.options = options;
-        votes = new HashMap<>();
         super.setType(Type.CREATE);
-    }
-
-    public Map<String, Vote> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(Map<String, Vote> votes) {
-        this.votes = votes;
     }
 
     public List<String> getOptions() {
@@ -35,5 +20,19 @@ public class Voting extends BaseEntity {
 
     public void setOptions(List<String> options) {
         this.options = options;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        String name = getName();
+        if (name != null) {
+            return name.equals(o.toString());
+        } else return false;
+    }
+
+    @Override
+    public int hashCode() {
+        String name = getName();
+        return name.hashCode();
     }
 }

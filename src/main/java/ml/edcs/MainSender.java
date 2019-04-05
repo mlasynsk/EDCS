@@ -1,28 +1,21 @@
 package ml.edcs;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import ml.edcs.model.Voting;
+import ml.edcs.service.OutboundService;
+
+import java.util.Arrays;
 
 public class MainSender {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
-        sendUDPMessage("This is a multicast messge", "230.0.0.0",
-                4321);
-        sendUDPMessage("This is the second multicast messge",
-                "230.0.0.0", 4321);
-    }
-
-    public static void sendUDPMessage(String message, String ipAddress, int port) throws IOException {
-        DatagramSocket socket = new DatagramSocket();
-        InetAddress group = InetAddress.getByName(ipAddress);
-        byte[] msg = message.getBytes();
-        DatagramPacket packet = new DatagramPacket(msg, msg.length, group, port);
-        socket.send(packet);
-        socket.close();
+        OutboundService outboundService = new OutboundService();
+        Voting voting = new Voting();
+        voting.setName("someName");
+        voting.setSender("me");
+        voting.setOptions(Arrays.asList("1", "2", "3"));
+        outboundService.create(voting);
     }
 
 

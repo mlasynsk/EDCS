@@ -2,6 +2,7 @@ package ml.edcs.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ml.edcs.dao.Storage;
 import ml.edcs.model.Register;
 import ml.edcs.model.Result;
 import ml.edcs.model.Vote;
@@ -11,12 +12,18 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class OutboundService {
 
     private static final String ipAddress = "230.0.0.0";
     private static final int port = 4321;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper;
+
+    public OutboundService() {
+        objectMapper = new ObjectMapper();
+    }
 
     public void register(Register register) {
         this.send(register);
@@ -27,6 +34,18 @@ public class OutboundService {
     }
 
     public void create(Voting voting) {
+        Storage.registerVoting(voting);
+        Timer timer = new Timer();
+        OutboundService outboundService = this;
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("Timer out");
+                Result result = Storage.getResult(voting.getName());
+                outboundService.result(result);
+            }
+        };
+        timer.schedule(timerTask, 10 * 1000);
         this.send(voting);
     }
 

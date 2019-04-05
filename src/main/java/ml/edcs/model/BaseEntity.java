@@ -1,9 +1,7 @@
 package ml.edcs.model;
 
-import java.util.Random;
-
 public abstract class BaseEntity {
-    private static final String sender = String.valueOf(new Random().nextInt());
+    private String sender;
     private Type type;
     private String name;
 
@@ -17,6 +15,10 @@ public abstract class BaseEntity {
 
     public String getSender() {
         return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
     public Type getType() {
