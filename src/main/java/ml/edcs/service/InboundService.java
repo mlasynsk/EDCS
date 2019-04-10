@@ -7,11 +7,14 @@ import ml.edcs.model.*;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 public class InboundService {
 
     private ObjectMapper objectMapper = new ObjectMapper();
     private OutboundService outboundService = new OutboundService();
+    private Random random = new Random();
 
     public synchronized void serve(String json) {
         JsonNode jsonNode = null;
@@ -41,21 +44,20 @@ public class InboundService {
     }
 
     private void register(Register register) {
-        System.out.println(register.toString());
         Storage.register(register);
     }
 
     private void result(Result result) {
-        System.out.println(result);
     }
 
     private void create(Voting voting) {
-        System.out.println(voting);
         Vote vote = new Vote();
         vote.setName(voting.getName());
         vote.setSender(Storage.NAME);
         vote.setReceiveTime(new Date());
-        vote.setOption(voting.getOptions().get(0));
+        List<String> options = voting.getOptions();
+        int index = random.nextInt() % options.size();
+        vote.setOption(options.get(Math.abs(index)));
         try {
             Thread.sleep(3999);
         } catch (InterruptedException e) {

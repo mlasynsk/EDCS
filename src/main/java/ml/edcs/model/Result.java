@@ -1,20 +1,20 @@
 package ml.edcs.model;
 
 
-import java.util.List;
+import java.util.Map;
 
-public class Result extends BaseEntity{
+public class Result extends BaseEntity {
+    Map<String, Integer> votes;
+
     public Result() {
         super.setType(Type.RESULT);
     }
 
-    List<Vote> votes;
-
-    public List<Vote> getVotes() {
+    public Map<String, Integer> getVotes() {
         return votes;
     }
 
-    public void setVotes(List<Vote> votes) {
+    public void setVotes(Map<String, Integer> votes) {
         this.votes = votes;
     }
 }

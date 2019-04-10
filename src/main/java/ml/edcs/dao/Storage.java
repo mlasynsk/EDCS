@@ -8,7 +8,7 @@ import ml.edcs.model.Voting;
 import java.util.*;
 
 public class Storage {
-    public final static String NAME = String.valueOf(new Random().nextInt());
+    public final static String NAME = String.valueOf(new Random().nextInt() % 100);
     private static Map<String, List<Vote>> votes = new HashMap<>();
     private static Map<String, List<Register>> registrations = new HashMap<>();
 
@@ -30,13 +30,22 @@ public class Storage {
 
     public static void register(Register register) {
         List<Register> registerList = Storage.registrations.get(register.getName());
-        registerList.add(register);
+        if (registerList != null) registerList.add(register);
     }
 
     public static Result getResult(String voting) {
         Result result = new Result();
         List<Vote> votes = Storage.votes.get(voting);
-        result.setVotes(votes);
+        Map<String, Integer> results = new HashMap<>();
+        for (Vote vote : votes) {
+            String option = vote.getOption();
+            if (results.containsKey(option)) {
+                results.put(option, results.get(option) + 1);
+            } else {
+                results.put(option, 1);
+            }
+        }
+        result.setVotes(results);
         result.setName(voting);
         result.setSender(NAME);
         return result;

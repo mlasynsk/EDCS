@@ -1,8 +1,8 @@
 package ml.edcs.model;
 
 public abstract class BaseEntity {
-    private String sender;
     private Type type;
+    private String sender;
     private String name;
 
     public String getName() {
@@ -28,4 +28,5 @@ public abstract class BaseEntity {
     void setType(Type type) {
         this.type = type;
     }
+
 }
