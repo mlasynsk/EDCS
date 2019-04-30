@@ -1,7 +1,7 @@
 package ml.edcs.model;
 
 public enum Type {
-    CREATE("create"), REGISTER("register"), VOTE("vote"), RESULT("result");
+    OPEN_VOTING("open_voting"), REGISTER("register"), VOTE("vote"), RESULT("result");
     private String type;
 
     Type(String type) {

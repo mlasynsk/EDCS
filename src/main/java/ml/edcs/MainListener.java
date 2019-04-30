@@ -33,6 +33,7 @@ public class MainListener {
         voting.setName(String.valueOf(new Random().nextInt()%20));
         voting.setSender(Storage.NAME);
         voting.setOptions(Arrays.asList("apple", "banana", "coffee"));
+        voting.setDefaultTime();
         outboundService.create(voting);
 
     }

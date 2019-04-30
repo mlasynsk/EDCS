@@ -40,12 +40,13 @@ public class OutboundService {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                System.out.println("Timer out");
+                System.out.println("Timer out it's time for results id:" + voting.getName());
                 Result result = Storage.getResult(voting.getName());
-                outboundService.result(result);
+                if (result != null) outboundService.result(result);
             }
         };
-        timer.schedule(timerTask, 10 * 1000);
+        timer.schedule(timerTask, voting.getResultTime());
+
         this.send(voting);
     }
 
