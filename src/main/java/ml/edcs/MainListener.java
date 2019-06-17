@@ -7,9 +7,9 @@ import ml.edcs.service.InboundService;
 import ml.edcs.service.OutboundService;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
+import java.net.*;
+import java.nio.channels.DatagramChannel;
+import java.nio.channels.MembershipKey;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -41,6 +41,7 @@ public class MainListener {
     private void listen() throws IOException {
         byte[] buffer = new byte[1024];
         MulticastSocket socket = new MulticastSocket(4321);
+        socket.setTimeToLive(255);
         InetAddress group = InetAddress.getByName("230.0.0.0");
         socket.joinGroup(group);
         while (true) {

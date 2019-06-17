@@ -10,8 +10,10 @@ import ml.edcs.model.Voting;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -63,9 +65,9 @@ public class OutboundService {
     }
 
     private void send(String message) {
-        DatagramSocket socket = null;
         try {
-            socket = new DatagramSocket();
+            MulticastSocket socket = new MulticastSocket(4321);
+            socket.setTimeToLive(255);
             InetAddress group = InetAddress.getByName(ipAddress);
             byte[] msg = message.getBytes();
             DatagramPacket packet = new DatagramPacket(msg, msg.length, group, port);
