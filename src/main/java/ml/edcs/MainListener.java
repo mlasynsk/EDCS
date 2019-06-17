@@ -15,11 +15,12 @@ import java.util.Random;
 
 public class MainListener {
 
-    public static final String HOST = "192.168.0.234";
+    public static String HOST;
     public static final String IP_ADDRESS = "230.0.0.0";
     public static final int PORT = 4321;
 
     public static void main(String[] args) {
+        HOST = System.getProperty("ip");
         System.out.println("--------- ME = " + Storage.NAME);
         MainListener mainListener = new MainListener();
         Runnable runnable = () -> {
