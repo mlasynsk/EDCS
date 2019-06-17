@@ -1,19 +1,24 @@
 package ml.edcs;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ml.edcs.dao.Storage;
 import ml.edcs.model.Voting;
 import ml.edcs.service.InboundService;
 import ml.edcs.service.OutboundService;
 
 import java.io.IOException;
-import java.net.*;
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.MembershipKey;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
+import java.net.NetworkInterface;
 import java.util.Arrays;
 import java.util.Random;
 
 public class MainListener {
+
+    public static final String HOST = "192.168.0.234";
+    public static final String IP_ADDRESS = "230.0.0.0";
+    public static final int PORT = 4321;
+
     public static void main(String[] args) {
         System.out.println("--------- ME = " + Storage.NAME);
         MainListener mainListener = new MainListener();
@@ -30,7 +35,7 @@ public class MainListener {
 
         OutboundService outboundService = new OutboundService();
         Voting voting = new Voting();
-        voting.setName(String.valueOf(new Random().nextInt()%20));
+        voting.setName(String.valueOf(new Random().nextInt() % 20));
         voting.setSender(Storage.NAME);
         voting.setOptions(Arrays.asList("apple", "banana", "coffee"));
         voting.setDefaultTime();
@@ -40,9 +45,10 @@ public class MainListener {
 
     private void listen() throws IOException {
         byte[] buffer = new byte[1024];
-        MulticastSocket socket = new MulticastSocket(4321);
-        socket.setTimeToLive(255);
-        InetAddress group = InetAddress.getByName("230.0.0.0");
+        MulticastSocket socket = new MulticastSocket(PORT);
+        socket.setTimeToLive(59);
+        InetAddress group = InetAddress.getByName(IP_ADDRESS);
+        socket.setInterface(InetAddress.getByName(HOST));
         socket.joinGroup(group);
         while (true) {
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
@@ -57,7 +63,5 @@ public class MainListener {
                 break;
             }
         }
-        socket.leaveGroup(group);
-        socket.close();
     }
 }

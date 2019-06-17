@@ -2,6 +2,7 @@ package ml.edcs.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ml.edcs.MainListener;
 import ml.edcs.dao.Storage;
 import ml.edcs.model.Register;
 import ml.edcs.model.Result;
@@ -19,8 +20,7 @@ import java.util.TimerTask;
 
 public class OutboundService {
 
-    private static final String ipAddress = "230.0.0.0";
-    private static final int port = 4321;
+
     private ObjectMapper objectMapper;
 
     public OutboundService() {
@@ -67,10 +67,11 @@ public class OutboundService {
     private void send(String message) {
         try {
             MulticastSocket socket = new MulticastSocket(4321);
-            socket.setTimeToLive(255);
-            InetAddress group = InetAddress.getByName(ipAddress);
+            socket.setInterface(InetAddress.getByName(MainListener.HOST));
+            socket.setTimeToLive(59);
+            InetAddress group = InetAddress.getByName(MainListener.IP_ADDRESS);
             byte[] msg = message.getBytes();
-            DatagramPacket packet = new DatagramPacket(msg, msg.length, group, port);
+            DatagramPacket packet = new DatagramPacket(msg, msg.length, group, MainListener.PORT);
             socket.send(packet);
             socket.close();
         } catch (IOException e) {
